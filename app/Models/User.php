@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Todos;
 
 class User extends Authenticatable
 {
@@ -62,4 +63,10 @@ class User extends Authenticatable
             return url('media-example/no-image.png');
         }
     }
+
+    public function todos()
+    {
+        return $this->hasMany(Todo::class);
+    }
+
 }
