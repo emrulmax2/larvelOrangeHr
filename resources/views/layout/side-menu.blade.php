@@ -9,6 +9,7 @@
     @include('../layout/components/top-bar')
     <div class="flex overflow-hidden">
         <!-- BEGIN: Side Menu -->
+        
         <nav class="side-nav">
             <ul>
                 @foreach ($side_menu as $menuKey => $menu)
