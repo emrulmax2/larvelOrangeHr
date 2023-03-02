@@ -40,9 +40,6 @@
                     <div class="text-3xl mt-5 successModalTitle">Good job!</div>
                     <div class="text-slate-500 mt-2 successModalDesc">You clicked the button!</div>
                 </div>
-                <div id="modalDimissal" class="px-5 pb-8 text-center">
-                    <button type="button" data-tw-dismiss="modal" class="btn btn-primary w-24">Ok</button>
-                </div>
             </div>
         </div>
     </div>
@@ -50,60 +47,5 @@
 <!-- END: Modal Content -->
 
 @section('script')
-    <script type="module">
-
-        const gobalSuccessModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#gobalSuccessModal"));
-        const todoModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-modal"));
-        (function () {
-            async function register() {
-
-                // Reset state
-                $('#todo-form').find('.login__input').removeClass('border-danger')
-                $('#todo-form').find('.login__input-error').html('')
-
-                // Post form
-                let myform = document.getElementById("todo-form");
-                let formData = new FormData(myform);
-                
-                // Loading state
-                $('#btn-submit').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
-                tailwind.svgLoader()
-                await helper.delay(1500)
-
-                axios.post('todo/store',formData).then(res => {
-                    $('#title').val('');
-                    $('#btn-submit').html('Save')
-                    todoModal.hide();
-                    gobalSuccessModal.show();
-                    document.getElementById('gobalSuccessModal').addEventListener('shown.tw.modal', function(event){
-                        $('#gobalSuccessModal .successModalTitle').html('Ok!');
-                        $('#gobalSuccessModal .successModalDesc').html('Data Saved Successfully.');
-                    });
-                }).catch(err => {
-                    $('#todo-form').find('.login__input').removeClass('border-danger')
-                    $('#todo-form').find('.login__input-error').html('')
-                    $('#btn-submit').html('Save')
-                    if (err.response.data.message != 'Data could not saved.') {
-                        for (const [key, val] of Object.entries(err.response.data.errors)) {
-                            $(`#${key}`).addClass('border-danger')
-                            $(`#error-${key}`).html(val)
-                        }
-                    } else {
-                        $('#title').addClass('border-danger')
-                        $('#error-title').html(err.response.data.message)
-                    }
-                })
-            }
-
-            $('#todo-form').on('keyup', function(e) {
-                if (e.keyCode === 13) {
-                    register()
-                }
-            })
-
-            $('#btn-submit').on('click', function() {
-                register()
-            })
-        })()
-    </script>
+        @vite('resources/js/todo-tabulator.js')
 @endsection

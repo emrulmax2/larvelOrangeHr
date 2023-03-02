@@ -13,7 +13,7 @@
     </div>
     <!-- BEGIN: HTML Table Data -->
     <div class="intro-y box p-5 mt-5">
-        {{-- <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
+        <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
             <form id="tabulator-html-filter-form" class="xl:flex sm:mr-auto" >
                 <div class="sm:flex items-center sm:mr-4">
                     <label class="w-12 flex-none xl:w-auto xl:flex-initial mr-2">Field</label>
@@ -78,11 +78,12 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
         <div class="overflow-x-auto scrollbar-hidden">
-            <div id="tabulator" class="mt-5 table-report table-report--tabulator"></div>
+            <div id="todo-tabulator" class="mt-5 table-report table-report--tabulator"></div>
         </div>
     </div>
     <!-- END: HTML Table Data -->
     @include('todos/_modal')
+
 @endsection

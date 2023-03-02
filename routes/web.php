@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TodoController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 
@@ -34,7 +35,9 @@ Route::middleware('auth')->group(function() {
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
     Route::controller(DashboardController::class)->group(function() {
         Route::get('/', 'index')->name('dashboard-overview-1');
-        Route::post('todo/store', 'store')->name('dashboard.store');
     });
-
+    Route::controller(TodoController::class)->group(function() {
+        Route::post('todo/store', 'store')->name('todo.store');
+        Route::get('todo/list', 'list')->name('todo.list');
+    });
 });
