@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
-use App\Models\Users;
+use App\Models\User;
+
+use Illuminate\Support\Str;
+
 class RegisterController extends Controller
 {
     public function index()
@@ -15,12 +19,12 @@ class RegisterController extends Controller
 
     public function store(RegisterRequest $request)
     {
-        $data = Users::create([
+        
+        $data = User::create([
             'name' => $request->input("name"),
             'email' => $request->input("email"),
-            'email_verified_at' => now(),
             'password' => $request->input("password"),
-            'gender' => ['male', 'female'][rand(0, 1)],
+            'gender' => $request->input("gender"),
             'active' => 1,
             'remember_token' => Str::random(10)
         ]);

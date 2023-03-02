@@ -27,34 +27,6 @@ class SideMenu
                     ],
                 ]
             ],
-            // 'components' => [
-            //     'icon' => 'inbox',
-            //     'title' => 'Components',
-            //     'sub_menu' => [
-            //         'grid' => [
-            //             'icon' => '',
-            //             'title' => 'Grid',
-            //             'sub_menu' => [
-            //                 'regular-table' => [
-            //                     'icon' => '',
-            //                     'route_name' => 'regular-table',
-            //                     'params' => [
-            //                         'layout' => 'side-menu'
-            //                     ],
-            //                     'title' => 'Regular Table'
-            //                 ],
-            //                 'tabulator' => [
-            //                     'icon' => '',
-            //                     'route_name' => 'tabulator',
-            //                     'params' => [
-            //                         'layout' => 'side-menu'
-            //                     ],
-            //                     'title' => 'Tabulator'
-            //                 ]
-            //             ]
-            //         ]
-            //     ]
-            // ],
 
         ];
     }

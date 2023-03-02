@@ -12,7 +12,7 @@
                 <a href="" class="-intro-x flex items-center pt-5">
                     <img alt="Midone - HTML Admin Template" class="w-6" src="{{ asset('build/assets/images/logo.svg') }}">
                     <span class="text-white text-lg ml-3">
-                        Tinker
+                        Demo
                     </span>
                 </a>
                 <div class="my-auto">
@@ -33,24 +33,19 @@
                         <div id="error-name" class="login__input-error text-danger mt-2"></div>
                         <input type="email" id="email" name="email" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Email">
                         <div id="error-email" class="login__input-error text-danger mt-2"></div>
+                        <select id="gender" name="gender" class="form-select login__input mt-2 sm:mr-2" aria-label="Default select example">
+                            <option value="">Please Select</option>
+                            <option value="male">Male</option>
+                            <option  value="female">Female</option>
+                        </select>
+                        <div id="error-gender" class="login__input-error text-danger mt-2"></div>
                         <input type="password" id="password" name="password" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password">
                         <div id="error-password" class="login__input-error text-danger mt-2"></div>
-                        {{-- <div class="intro-x w-full grid grid-cols-12 gap-4 h-1 mt-3">
-                            <div class="col-span-3 h-full rounded bg-success"></div>
-                            <div class="col-span-3 h-full rounded bg-success"></div>
-                            <div class="col-span-3 h-full rounded bg-success"></div>
-                            <div class="col-span-3 h-full rounded bg-slate-100 dark:bg-darkmode-800"></div>
-                        </div>
-                        <a href="" class="intro-x text-slate-500 block mt-2 text-xs sm:text-sm">What is a secure password?</a> --}}
-                        <input type="password" id="confirmation" name="confirmation" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password Confirmation">
+                        
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="intro-x login__input form-control py-3 px-4 block mt-4" placeholder="Password Confirmation">
                         <div id="error-confirmation" class="login__input-error text-danger mt-2"></div>
                     </form>
                     </div>
-                    {{-- <div class="intro-x flex items-center text-slate-600 dark:text-slate-500 mt-4 text-xs sm:text-sm">
-                        <input id="remember-me" type="checkbox" class="form-check-input border mr-2">
-                        <label class="cursor-pointer select-none" for="remember-me">I agree to the Demo</label>
-                        <a class="text-primary dark:text-slate-200 ml-1" href="">Privacy Policy</a>.
-                    </div> --}}
                     <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left">
                         <button id="btn-login" class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top">Register</button>
                         <a href="{{ route('login.index') }}" class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top">Sign in</a>
@@ -66,26 +61,23 @@
         (function () {
             async function register() {
                 // Reset state
-                $('#login-form').find('.login__input').removeClass('border-danger')
-                $('#login-form').find('.login__input-error').html('')
+                $('#register-form').find('.login__input').removeClass('border-danger')
+                $('#register-form').find('.login__input-error').html('')
 
                 // Post form
-                let email = $('#email').val()
-                let password = $('#password').val()
-                let name = $('#name').val()
+                let myform = document.getElementById("register-form");
+                let formData = new FormData(myform);
                 // Loading state
                 $('#btn-login').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
                 tailwind.svgLoader()
                 await helper.delay(1500)
 
-                axios.post(`register`, {
-                    email: email,
-                    password: password,
-                    name: name
-                }).then(res => {
+                axios.post(`register`,formData).then(res => {
                     location.href = '/'
                 }).catch(err => {
-                    $('#btn-login').html('Login')
+                    $('#register-form').find('.login__input').removeClass('border-danger')
+                    $('#register-form').find('.login__input-error').html('')
+                    $('#btn-login').html('Register')
                     if (err.response.data.message != 'Wrong email or password.') {
                         for (const [key, val] of Object.entries(err.response.data.errors)) {
                             $(`#${key}`).addClass('border-danger')
@@ -98,7 +90,7 @@
                 })
             }
 
-            $('#login-form').on('keyup', function(e) {
+            $('#register-form').on('keyup', function(e) {
                 if (e.keyCode === 13) {
                     register()
                 }
