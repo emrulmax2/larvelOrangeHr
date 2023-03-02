@@ -4,7 +4,10 @@ import Tabulator from "tabulator-tables";
 
 (function () {
     "use strict";
-
+    //constant adding
+    const gobalSuccessModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#gobalSuccessModal"));
+    const todoModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-modal"));
+    const deleteModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteModalPreview"));
     // Tabulator
     if ($("#todo-tabulator").length) {
         // Setup Tabulator
@@ -103,7 +106,8 @@ import Tabulator from "tabulator-tables";
                         $(a)
                             .find(".delete")
                             .on("click", function () {
-                                alert("DELETE");
+                                 $('#deleteId').val(cell.getData().id);
+                                deleteModal.show();
                             });
 
                         return a[0];
@@ -206,9 +210,6 @@ import Tabulator from "tabulator-tables";
         });
     }
     //Todo Works
-    const gobalSuccessModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#gobalSuccessModal"));
-    const todoModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-modal"));
-
         async function register() {
 
             // Reset state
