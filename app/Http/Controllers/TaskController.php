@@ -36,7 +36,15 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        //
+
+         $Task = new Task();
+         $Task -> fill($request->all());
+         $isSaved = $Task -> save();
+         if($isSaved)
+            return response()->json(['Data saved'],200);
+         else 
+            return response()->json(['message'=>'Data could not saved','errors'=>["title"=>"somthing went wrong. Please try again"]],422);
+    
     }
 
     /**

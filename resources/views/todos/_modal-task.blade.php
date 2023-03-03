@@ -48,11 +48,12 @@
             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                 
                 <div class="col-span-12 sm:col-span-12">
+                    <div  class="text-base font-medium truncate mb-5">Todo: <span id="todoTitle"></span></div>
                     <form id="task-add-form">
                         <label for="name" class="form-label">Task</label>
                         <input id="name" name="name" type="text" class="form-control login__input" placeholder="This is my task for todo list">
                         <div id="error-name" class="login__input-error text-danger mt-2"></div>
-                        <input type="hidden" id="todo_id" value="" />
+                        <input type="hidden" name="todo_id" id="todoId" value="" />
                     </form>
                 </div>
             </div>
@@ -60,7 +61,7 @@
             <!-- BEGIN: Modal Footer -->
             <div class="modal-footer">
                 <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
-                <button id="btn-add-task" type="button" class="btn btn-primary w-20">Update</button>
+                <button id="btn-add-task" type="button" class="btn btn-primary w-20">Save</button>
             </div>
             <!-- END: Modal Footer -->
         </div>

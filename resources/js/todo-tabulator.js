@@ -11,6 +11,7 @@ import Tabulator from "tabulator-tables";
     const deleteModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteModalPreview"));
 
     const taskViewModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#task-modal"));
+    const taskAddModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#task-add-modal"));
     const deleteTaskModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteTaskModalPreview"));
     // Tabulator
     if ($("#todo-tabulator").length) {
@@ -36,17 +37,6 @@ import Tabulator from "tabulator-tables";
                     resizable: false,
                     headerSort: false,
                 },
-                
-                // {
-                //     title: "S/N",
-                //     maxWidth: 100,
-                //     field: "sl",
-                //     hozAlign: "center",
-                //     vertAlign: "middle",
-                //     print: false,
-                //     download: false,
-                //     headerSort: false,
-                // },
                 // For HTML table
                 {
                     title: "TODO NAME",
@@ -157,14 +147,17 @@ import Tabulator from "tabulator-tables";
                         $(a)
                             .find(".add-task")
                             .on("click", function () {
-                                alert("add-task");
+                                taskAddModal.show()
+                                $("#name").val('')
+                                $('#todoId').val(cell.getData().id)
+                                document.getElementById("todoTitle").innerHTML = cell.getData().title
                         });
 
                         $(a)
                             .find(".delete")
                             .on("click", function () {
-                                 $('#deleteId').val(cell.getData().id);
-                                deleteModal.show();
+                                 $('#deleteId').val(cell.getData().id)
+                                deleteModal.show()
                             });
 
                         return a[0];
@@ -351,7 +344,60 @@ import Tabulator from "tabulator-tables";
         $('#delete-data').on('click', function() {
             deleteToDo()
         })
-    
+        //add Task
+        async function addTask() {
+
+            // Reset state
+            $('#task-add-form').find('.login__input').removeClass('border-danger')
+            $('#task-add-form').find('.login__input-error').html('')
+
+            // Post form
+            let myform = document.getElementById("task-add-form")
+            let formData = new FormData(myform)
+            
+            // Loading state
+            $('#btn-add-task').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
+            tailwind.svgLoader()
+            await helper.delay(500)
+
+            axios.post('task/store',formData).then(res => {
+                $('#title').val('')
+                $('#btn-add-task').html('Save')
+                taskAddModal.hide()
+                gobalSuccessModal.show()
+                document.getElementById('gobalSuccessModal').addEventListener('shown.tw.modal', function(event){
+                    $('#gobalSuccessModal .successModalTitle').html('Saved!')
+                    $('#gobalSuccessModal .successModalDesc').html('Data Saved Successfully.')
+                });
+                setTimeout(function(){
+                    gobalSuccessModal.hide()
+                    window.location.reload()
+                }, 1500);
+            }).catch(err => {
+                $('#task-add-form').find('.login__input').removeClass('border-danger')
+                $('#task-add-form').find('.login__input-error').html('')
+                $('#btn-add-task').html('Save')
+                if (err.response.data.message != 'Data saved') {
+                    for (const [key, val] of Object.entries(err.response.data.errors)) {
+                        $(`#${key}`).addClass('border-danger')
+                        $(`#error-${key}`).html(val)
+                    }
+                } else {
+                    $('#name').addClass('border-danger')
+                    $('#error-name').html(err.response.data.message)
+                }
+            })
+        }
+
+        $('#task-add-form').on('keyup', function(e) {
+            if (e.keyCode === 13) {
+                addTask()
+            }
+        })
+
+        $('#btn-add-task').on('click', function() {
+            addTask()
+        })        
         //delete Task
         async function deleteTask() {
 
