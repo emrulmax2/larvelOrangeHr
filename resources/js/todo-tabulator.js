@@ -12,6 +12,7 @@ import Tabulator from "tabulator-tables";
 
     const taskViewModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#task-modal"));
     const taskAddModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#task-add-modal"));
+    const taskEditModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#task-edit-modal"));
     const deleteTaskModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteTaskModalPreview"));
     // Tabulator
     if ($("#todo-tabulator").length) {
@@ -103,20 +104,23 @@ import Tabulator from "tabulator-tables";
                             .on("click", function () {
 
                                 let taskList = cell.getData().tasks
+                                
+                                
                                 let tableHtml ='';
                                 for(let i=0,sl=1; i<taskList.length; i++,sl++) {
                                     tableHtml+=`<tr id="task`+taskList[i].id+`" data-taskId=`+taskList[i].id+`>
                                         <td class="whitespace-nowrap">`+sl+`</td>
-                                        <td class="whitespace-nowrap">`+taskList[i].name+`</td>
+                                        <td class="whitespace-nowrap"><span id="taskName`+taskList[i].id+`">`+taskList[i].name+`</span></td>
                                         <td class="whitespace-nowrap">`+taskList[i].created_at+`</td>
                                         <td class="whitespace-nowrap">
-                                        
-                                        <a  class="edit-task flex items-center mr-3" href="javascript:;">
-                                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
-                                        </a>
-                                        <a class="delete-task flex items-center text-danger" href="javascript:;">
-                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                                        </a>
+                                            <div class="flex lg:justify-center items-center">
+                                                <a  class="edit-task flex items-center mr-3" href="javascript:;">
+                                                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
+                                                </a>
+                                                <a class="delete-task flex items-center text-danger" href="javascript:;">
+                                                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>`
                                 }
@@ -131,16 +135,21 @@ import Tabulator from "tabulator-tables";
                                 taskViewModal.show()
                                 $('.delete-task').on('click', function(e) {
 
-                                    let taskId = parseInt(e.target.parentNode.parentNode.getAttribute('data-taskId'));
+                                    let taskId = parseInt(e.target.parentNode.parentNode.parentNode.getAttribute('data-taskId'));
                                     document.getElementById('deletetaskId').value = taskId;
                                     taskViewModal.hide()
                                     deleteTaskModal.show()
                                 })
-                                $('.edit-task').on('click', function() {
-                                    let taskId = parseInt(e.target.parentNode.parentNode.getAttribute('data-taskId'));
-                                    //document.getElementById('deletetaskId').value = taskId;
-                                    //taskViewModal.hide()
-                                    //deleteTaskModal.show()
+                                $('.edit-task').on('click', function(e) {
+
+                                    let taskId = parseInt(e.target.parentNode.parentNode.parentNode.getAttribute('data-taskId'));
+                                    taskViewModal.hide()
+                                    taskEditModal.show()
+                                    document.getElementById('taskId').value = taskId
+                                    let taskName = document.getElementById("taskName"+taskId).innerHTML
+                                    $("#task-edit-form #name").val(taskName)
+                                    document.getElementById("todoEditTitle").innerHTML = cell.getData().title
+
                                 })
                         });
 
@@ -361,7 +370,7 @@ import Tabulator from "tabulator-tables";
             await helper.delay(500)
 
             axios.post('task/store',formData).then(res => {
-                $('#title').val('')
+                $('#name').val('')
                 $('#btn-add-task').html('Save')
                 taskAddModal.hide()
                 gobalSuccessModal.show()
