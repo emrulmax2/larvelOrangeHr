@@ -73,6 +73,15 @@ class TaskController extends Controller
         //
     }
 
+    public function delete(Task $task) {
+
+        $isDeleted = $task->delete();
+        if($isDeleted)
+            return response()->json(['Data Deleted'],200);
+        else 
+            return response()->json(['message'=>'Data could not deleted','errors'=>["title"=>"data not found"]],422);
+
+    }
     /**
      * Remove the specified resource from storage.
      *

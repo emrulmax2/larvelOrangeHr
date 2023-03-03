@@ -9,6 +9,9 @@ import Tabulator from "tabulator-tables";
     const todoModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-modal"));
     const todoEditModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-edit-modal"));
     const deleteModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteModalPreview"));
+
+    const taskViewModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#task-modal"));
+    const deleteTaskModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteTaskModalPreview"));
     // Tabulator
     if ($("#todo-tabulator").length) {
         // Setup Tabulator
@@ -108,7 +111,47 @@ import Tabulator from "tabulator-tables";
                         $(a)
                             .find(".view")
                             .on("click", function () {
-                                alert("view");
+
+                                let taskList = cell.getData().tasks
+                                let tableHtml ='';
+                                for(let i=0,sl=1; i<taskList.length; i++,sl++) {
+                                    tableHtml+=`<tr id="task`+taskList[i].id+`" data-taskId=`+taskList[i].id+`>
+                                        <td class="whitespace-nowrap">`+sl+`</td>
+                                        <td class="whitespace-nowrap">`+taskList[i].name+`</td>
+                                        <td class="whitespace-nowrap">`+taskList[i].created_at+`</td>
+                                        <td class="whitespace-nowrap">
+                                        
+                                        <a  class="edit-task flex items-center mr-3" href="javascript:;">
+                                            <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit 
+                                        </a>
+                                        <a class="delete-task flex items-center text-danger" href="javascript:;">
+                                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                                        </a>
+                                        </td>
+                                    </tr>`
+                                }
+                                
+                                let myTaskTable = document.getElementById('taskTableList').getElementsByTagName('tbody')[0];
+                                myTaskTable.innerHTML =tableHtml;
+                                createIcons({
+                                    icons,
+                                    "stroke-width": 1.5,
+                                    nameAttr: "data-lucide",
+                                });
+                                taskViewModal.show()
+                                $('.delete-task').on('click', function(e) {
+
+                                    let taskId = parseInt(e.target.parentNode.parentNode.getAttribute('data-taskId'));
+                                    document.getElementById('deletetaskId').value = taskId;
+                                    taskViewModal.hide()
+                                    deleteTaskModal.show()
+                                })
+                                $('.edit-task').on('click', function() {
+                                    let taskId = parseInt(e.target.parentNode.parentNode.getAttribute('data-taskId'));
+                                    //document.getElementById('deletetaskId').value = taskId;
+                                    //taskViewModal.hide()
+                                    //deleteTaskModal.show()
+                                })
                         });
 
                         $(a)
@@ -163,65 +206,6 @@ import Tabulator from "tabulator-tables";
             });
         });
 
-        // Filter function
-        function filterHTMLForm() {
-            let field = $("#todo-tabulator-html-filter-field").val();
-            let type = $("#todo-tabulator-html-filter-type").val();
-            let value = $("#todo-tabulator-html-filter-value").val();
-            table.setFilter(field, type, value);
-        }
-
-        // On submit filter form
-        // $("#todo-tabulator-html-filter-form")[0].addEventListener(
-        //     "keypress",
-        //     function (event) {
-        //         let keycode = event.keyCode ? event.keyCode : event.which;
-        //         if (keycode == "13") {
-        //             event.preventDefault();
-        //             filterHTMLForm();
-        //         }
-        //     }
-        // );
-
-        // On click go button
-        // $("#todo-tabulator-html-filter-go").on("click", function (event) {
-        //     filterHTMLForm();
-        // });
-
-        // On reset filter form
-        // $("#todo-tabulator-html-filter-reset").on("click", function (event) {
-        //     $("#todo-tabulator-html-filter-field").val("name");
-        //     $("#todo-tabulator-html-filter-type").val("like");
-        //     $("#todo-tabulator-html-filter-value").val("");
-        //     filterHTMLForm();
-        // });
-
-        // Export
-        // $("#todo-tabulator-export-csv").on("click", function (event) {
-        //     table.download("csv", "data.csv");
-        // });
-
-        // $("#todo-tabulator-export-json").on("click", function (event) {
-        //     table.download("json", "data.json");
-        // });
-
-        // $("#todo-tabulator-export-xlsx").on("click", function (event) {
-        //     window.XLSX = xlsx;
-        //     table.download("xlsx", "data.xlsx", {
-        //         sheetName: "Products",
-        //     });
-        // });
-
-        // $("#todo-tabulator-export-html").on("click", function (event) {
-        //     table.download("html", "data.html", {
-        //         style: true,
-        //     });
-        // });
-
-        // Print
-        // $("#todo-tabulator-print").on("click", function (event) {
-        //     table.print();
-        // });
     }
     //Todo Works
         async function addTodo() {
@@ -278,6 +262,7 @@ import Tabulator from "tabulator-tables";
             addTodo()
         })
 
+        
         //update Todo
         async function editTodo() {
 
@@ -367,4 +352,38 @@ import Tabulator from "tabulator-tables";
             deleteToDo()
         })
     
+        //delete Task
+        async function deleteTask() {
+
+            // Post form
+            let deleteId = document.getElementById("deletetaskId").value;
+            
+            // Loading state
+            $('#delete-task-data').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
+            tailwind.svgLoader()
+            await helper.delay(500)
+
+            axios.delete('task/delete/'+deleteId).then(res => {
+                $('#deletetaskId').val('');
+                $('#delete-task-data').html('Delete');
+                deleteTaskModal.hide();
+                gobalSuccessModal.show();
+                document.getElementById('gobalSuccessModal').addEventListener('shown.tw.modal', function(event){
+                    $('#gobalSuccessModal .successModalTitle').html('Deleted!');
+                    $('#gobalSuccessModal .successModalDesc').html('');
+                });
+                setTimeout(function(){
+                    gobalSuccessModal.hide();
+                    window.location.reload();
+                }, 1500);
+            }).catch(err => {
+                
+                $('#delete-task-data').html('Delete')
+                
+            })
+        }
+
+        $('#delete-task-data').on('click', function() {
+            deleteTask()
+        })
 })();

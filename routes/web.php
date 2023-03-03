@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\DarkModeController;
 use App\Http\Controllers\ColorSchemeController;
 
@@ -41,5 +42,11 @@ Route::middleware('auth')->group(function() {
         Route::post('todo/update/{todo}', 'update')->name('todo.update');
         Route::get('todo/list', 'list')->name('todo.list');
         Route::delete('todo/delete/{todo}', 'delete')->name('todo.delete');
+    });
+    
+    Route::controller(TaskController::class)->group(function() {
+        Route::post('task/store', 'store')->name('task.store');
+        Route::post('task/update/{task}', 'update')->name('task.update');
+        Route::delete('task/delete/{task}', 'delete')->name('task.delete');
     });
 });

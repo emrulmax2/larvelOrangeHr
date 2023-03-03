@@ -38,7 +38,7 @@ class TodoController extends Controller
         $limit = $perpage;
         $offset = ($page > 0 ? ($page - 1) * $perpage : 0);
 
-        $query = Todo::orderByRaw(implode(',', $sorts));
+        $query = Todo::with('task')->orderByRaw(implode(',', $sorts));
         
         // if($status == 2):
         //     $query->onlyTrashed();
@@ -57,7 +57,8 @@ class TodoController extends Controller
                     'title' => $todo->title,
                     'description' => $todo->description,
                     'created_at' => $todo->created_at,
-                    'deleted_at' => $todo->deleted_at
+                    'deleted_at' => $todo->deleted_at,
+                    'tasks' => $todo->task
                 ];
                 $i++;
             endforeach;
