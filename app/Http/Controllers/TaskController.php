@@ -78,7 +78,19 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        //
+        $task->name = $request->input('name');
+        
+        $task->save();
+
+        $isChanged = $task->wasChanged();
+        
+        if($isChanged) {
+        
+            return response()->json(['Data Updated'],200);
+        
+        } else 
+        
+            return response()->json(['message'=>'Data could not updated','errors'=>["title"=>"No data changed"]],422);
     }
 
     public function delete(Task $task) {

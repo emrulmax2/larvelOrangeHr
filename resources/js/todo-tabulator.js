@@ -406,7 +406,62 @@ import Tabulator from "tabulator-tables";
 
         $('#btn-add-task').on('click', function() {
             addTask()
-        })        
+        })   
+        
+        //update Task
+        async function editTask() {
+
+            // Reset state
+            $('#task-edit-form').find('.login__input').removeClass('border-danger')
+            $('#task-edit-form').find('.login__input-error').html('')
+            // Post form
+            let myform = document.getElementById("task-edit-form");
+            let myEditId = document.getElementById("taskId").value;
+            let formData = new FormData(myform);
+            
+            // Loading state
+            $('#btn-edit-task').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
+            tailwind.svgLoader()
+            await helper.delay(500)
+
+            axios.post('task/update/'+myEditId,formData).then(res => {
+                $('#btn-edit-task').html('Update')
+                taskEditModal.hide();
+                gobalSuccessModal.show();
+                document.getElementById('gobalSuccessModal').addEventListener('shown.tw.modal', function(event){
+                    $('#gobalSuccessModal .successModalTitle').html('Updated!');
+                    $('#gobalSuccessModal .successModalDesc').html('Data Updated Successfully.');
+                });
+                setTimeout(function(){
+                    gobalSuccessModal.hide();
+                    window.location.reload();
+                }, 1500);
+            }).catch(err => {
+                $('#task-edit-form').find('.login__input').removeClass('border-danger')
+                $('#task-edit-form').find('.login__input-error').html('')
+                $('#btn-edit-task').html('Update')
+                if (err.response.data.message != 'Data Updated') {
+                    for (const [key, val] of Object.entries(err.response.data.errors)) {
+                        $(`#${key}`).addClass('border-danger')
+                        $(`#error-${key}`).html(val)
+                    }
+                } else {
+                    $('#task-edit-form #name').addClass('border-danger')
+                    $('#error-name').html(err.response.data.message)
+                }
+            })
+        }
+
+        $('#task-edit-form').on('keyup', function(e) {
+            if (e.keyCode === 13) {
+                editTask()
+            }
+        })
+
+        $('#btn-edit-task').on('click', function() {
+            editTask()
+        })
+        
         //delete Task
         async function deleteTask() {
 
