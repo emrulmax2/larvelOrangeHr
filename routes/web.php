@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function() {
     });
     Route::controller(TodoController::class)->group(function() {
         Route::post('todo/store', 'store')->name('todo.store');
+        Route::post('todo/update/{todo}', 'update')->name('todo.update');
         Route::get('todo/list', 'list')->name('todo.list');
+        Route::delete('todo/delete/{todo}', 'delete')->name('todo.delete');
     });
 });

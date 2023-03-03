@@ -30,7 +30,40 @@
 </div>
 <!-- END: Modal Content -->
 
-<!-- BEGIN: Modal Content -->
+<!-- BEGIN: Edit Modal Content -->
+<div id="todo-edit-modal" class="modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- BEGIN: Modal Header -->
+            <div class="modal-header">
+                <h2 class="font-medium text-base mr-auto">Edit Todo</h2>
+            </div>
+            <!-- END: Modal Header -->
+            <!-- BEGIN: Modal Body -->
+            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                
+                <div class="col-span-12 sm:col-span-12">
+                    <form id="todo-edit-form">
+                        <label for="title" class="form-label">Title</label>
+                        <input id="title" name="title" type="text" class="form-control login__input" placeholder="I need a coffee break">
+                        <div id="error-title" class="login__input-error text-danger mt-2"></div>
+                        <input type="hidden" id="id" value="" />
+                    </form>
+                </div>
+            </div>
+            <!-- END: Modal Body -->
+            <!-- BEGIN: Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
+                <button id="btn-update" type="button" class="btn btn-primary w-20">Update</button>
+            </div>
+            <!-- END: Modal Footer -->
+        </div>
+    </div>
+</div>
+<!-- END: Modal Content -->
+
+<!-- BEGIN: Success Modal Content -->
 <div id="gobalSuccessModal" class="modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

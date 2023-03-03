@@ -12,6 +12,10 @@ class Todo extends Model
     protected $fillable = [
         'title', 'description','user_id'
     ];
+    public function getCreatedAtAttribute($value)
+    {
+        return date("d/m/Y H:i",strtotime($value));
+    }
 
     
     public function user()

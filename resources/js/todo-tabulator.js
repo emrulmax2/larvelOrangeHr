@@ -7,6 +7,7 @@ import Tabulator from "tabulator-tables";
     //constant adding
     const gobalSuccessModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#gobalSuccessModal"));
     const todoModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-modal"));
+    const todoEditModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#todo-edit-modal"));
     const deleteModal = tailwind.Modal.getOrCreateInstance(document.querySelector("#deleteModalPreview"));
     // Tabulator
     if ($("#todo-tabulator").length) {
@@ -32,7 +33,17 @@ import Tabulator from "tabulator-tables";
                     resizable: false,
                     headerSort: false,
                 },
-
+                
+                // {
+                //     title: "S/N",
+                //     maxWidth: 100,
+                //     field: "sl",
+                //     hozAlign: "center",
+                //     vertAlign: "middle",
+                //     print: false,
+                //     download: false,
+                //     headerSort: false,
+                // },
                 // For HTML table
                 {
                     title: "TODO NAME",
@@ -50,11 +61,11 @@ import Tabulator from "tabulator-tables";
                         </div>`;
                     },
                 },
-                ,
+                
                 {
-                    title: "Description",
+                    title: "Created Date",
                     minWidth: 200,
-                    field: "description",
+                    field: "created_at",
                     hozAlign: "center",
                     vertAlign: "middle",
                     print: false,
@@ -88,7 +99,10 @@ import Tabulator from "tabulator-tables";
                         $(a)
                             .find(".edit")
                             .on("click", function () {
-                                alert("EDIT");
+                                
+                                $('#id').val(cell.getData().id);
+                                $('#todo-edit-form #title').val(cell.getData().title);
+                                todoEditModal.show()
                             });
 
                         $(a)
@@ -123,8 +137,8 @@ import Tabulator from "tabulator-tables";
                     download: true,
                 },
                 {
-                    title: "Description",
-                    field: "description",
+                    title: "Created Date",
+                    field: "created_at",
                     visible: false,
                     print: true,
                     download: true,
@@ -158,59 +172,59 @@ import Tabulator from "tabulator-tables";
         }
 
         // On submit filter form
-        $("#todo-tabulator-html-filter-form")[0].addEventListener(
-            "keypress",
-            function (event) {
-                let keycode = event.keyCode ? event.keyCode : event.which;
-                if (keycode == "13") {
-                    event.preventDefault();
-                    filterHTMLForm();
-                }
-            }
-        );
+        // $("#todo-tabulator-html-filter-form")[0].addEventListener(
+        //     "keypress",
+        //     function (event) {
+        //         let keycode = event.keyCode ? event.keyCode : event.which;
+        //         if (keycode == "13") {
+        //             event.preventDefault();
+        //             filterHTMLForm();
+        //         }
+        //     }
+        // );
 
         // On click go button
-        $("#todo-tabulator-html-filter-go").on("click", function (event) {
-            filterHTMLForm();
-        });
+        // $("#todo-tabulator-html-filter-go").on("click", function (event) {
+        //     filterHTMLForm();
+        // });
 
         // On reset filter form
-        $("#todo-tabulator-html-filter-reset").on("click", function (event) {
-            $("#todo-tabulator-html-filter-field").val("name");
-            $("#todo-tabulator-html-filter-type").val("like");
-            $("#todo-tabulator-html-filter-value").val("");
-            filterHTMLForm();
-        });
+        // $("#todo-tabulator-html-filter-reset").on("click", function (event) {
+        //     $("#todo-tabulator-html-filter-field").val("name");
+        //     $("#todo-tabulator-html-filter-type").val("like");
+        //     $("#todo-tabulator-html-filter-value").val("");
+        //     filterHTMLForm();
+        // });
 
         // Export
-        $("#todo-tabulator-export-csv").on("click", function (event) {
-            table.download("csv", "data.csv");
-        });
+        // $("#todo-tabulator-export-csv").on("click", function (event) {
+        //     table.download("csv", "data.csv");
+        // });
 
-        $("#todo-tabulator-export-json").on("click", function (event) {
-            table.download("json", "data.json");
-        });
+        // $("#todo-tabulator-export-json").on("click", function (event) {
+        //     table.download("json", "data.json");
+        // });
 
-        $("#todo-tabulator-export-xlsx").on("click", function (event) {
-            window.XLSX = xlsx;
-            table.download("xlsx", "data.xlsx", {
-                sheetName: "Products",
-            });
-        });
+        // $("#todo-tabulator-export-xlsx").on("click", function (event) {
+        //     window.XLSX = xlsx;
+        //     table.download("xlsx", "data.xlsx", {
+        //         sheetName: "Products",
+        //     });
+        // });
 
-        $("#todo-tabulator-export-html").on("click", function (event) {
-            table.download("html", "data.html", {
-                style: true,
-            });
-        });
+        // $("#todo-tabulator-export-html").on("click", function (event) {
+        //     table.download("html", "data.html", {
+        //         style: true,
+        //     });
+        // });
 
         // Print
-        $("#todo-tabulator-print").on("click", function (event) {
-            table.print();
-        });
+        // $("#todo-tabulator-print").on("click", function (event) {
+        //     table.print();
+        // });
     }
     //Todo Works
-        async function register() {
+        async function addTodo() {
 
             // Reset state
             $('#todo-form').find('.login__input').removeClass('border-danger')
@@ -223,7 +237,7 @@ import Tabulator from "tabulator-tables";
             // Loading state
             $('#btn-submit').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
             tailwind.svgLoader()
-            await helper.delay(1500)
+            await helper.delay(500)
 
             axios.post('todo/store',formData).then(res => {
                 $('#title').val('');
@@ -237,7 +251,7 @@ import Tabulator from "tabulator-tables";
                 setTimeout(function(){
                     gobalSuccessModal.hide();
                     window.location.reload();
-                }, 2000);
+                }, 1500);
             }).catch(err => {
                 $('#todo-form').find('.login__input').removeClass('border-danger')
                 $('#todo-form').find('.login__input-error').html('')
@@ -256,12 +270,101 @@ import Tabulator from "tabulator-tables";
 
         $('#todo-form').on('keyup', function(e) {
             if (e.keyCode === 13) {
-                register()
+                addTodo()
             }
         })
 
         $('#btn-submit').on('click', function() {
-            register()
+            addTodo()
+        })
+
+        //update Todo
+        async function editTodo() {
+
+            // Reset state
+            $('#todo-edit-form').find('.login__input').removeClass('border-danger')
+            $('#todo-edit-form').find('.login__input-error').html('')
+            // Post form
+            let myform = document.getElementById("todo-edit-form");
+            let myEditId = document.getElementById("id").value;
+            let formData = new FormData(myform);
+            
+            // Loading state
+            $('#btn-update').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
+            tailwind.svgLoader()
+            await helper.delay(500)
+
+            axios.post('todo/update/'+myEditId,formData).then(res => {
+                $('#btn-update').html('Update')
+                todoEditModal.hide();
+                gobalSuccessModal.show();
+                document.getElementById('gobalSuccessModal').addEventListener('shown.tw.modal', function(event){
+                    $('#gobalSuccessModal .successModalTitle').html('Updated!');
+                    $('#gobalSuccessModal .successModalDesc').html('Data Updated Successfully.');
+                });
+                setTimeout(function(){
+                    gobalSuccessModal.hide();
+                    window.location.reload();
+                }, 1500);
+            }).catch(err => {
+                $('#todo-edit-form').find('.login__input').removeClass('border-danger')
+                $('#todo-edit-form').find('.login__input-error').html('')
+                $('#btn-update').html('Update')
+                if (err.response.data.message != 'Data Updated') {
+                    for (const [key, val] of Object.entries(err.response.data.errors)) {
+                        $(`#${key}`).addClass('border-danger')
+                        $(`#error-${key}`).html(val)
+                    }
+                } else {
+                    $('#todo-edit-form #title').addClass('border-danger')
+                    $('#error-title').html(err.response.data.message)
+                }
+            })
+        }
+
+        $('#todo-edit-form').on('keyup', function(e) {
+            if (e.keyCode === 13) {
+                editTodo()
+            }
+        })
+
+        $('#btn-update').on('click', function() {
+            editTodo()
+        })
+
+        //delete Todo
+        async function deleteToDo() {
+
+            // Post form
+            let deleteId = document.getElementById("deleteId").value;
+            
+            // Loading state
+            $('#delete-data').html('<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>')
+            tailwind.svgLoader()
+            await helper.delay(500)
+
+            axios.delete('todo/delete/'+deleteId).then(res => {
+                $('#deleteId').val('');
+                $('#delete-data').html('Delete');
+                deleteModal.hide();
+                gobalSuccessModal.show();
+                document.getElementById('gobalSuccessModal').addEventListener('shown.tw.modal', function(event){
+                    $('#gobalSuccessModal .successModalTitle').html('Deleted!');
+                    $('#gobalSuccessModal .successModalDesc').html('');
+                });
+                setTimeout(function(){
+                    gobalSuccessModal.hide();
+                    window.location.reload();
+                }, 1500);
+            }).catch(err => {
+                
+                $('#delete-data').html('Delete')
+                
+            })
+        }
+
+        $('#delete-data').on('click', function() {
+            deleteToDo()
         })
     
 })();

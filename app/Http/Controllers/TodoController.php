@@ -124,9 +124,32 @@ class TodoController extends Controller
      */
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
-        //
+         
+        $todo->title = $request->input('title');
+        
+        $todo->save();
+
+        $isChanged = $todo->wasChanged();
+        
+        if($isChanged) {
+        
+            return response()->json(['Data Updated'],200);
+        
+        } else 
+        
+            return response()->json(['message'=>'Data could not updated','errors'=>["title"=>"No data changed"]],422);
+    
     }
 
+    public function delete(Todo $todo) {
+
+        $isDeleted = $todo->delete();
+        if($isDeleted)
+            return response()->json(['Data Deleted'],200);
+        else 
+            return response()->json(['message'=>'Data could not deleted','errors'=>["title"=>"data not found"]],422);
+
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -137,4 +160,6 @@ class TodoController extends Controller
     {
         //
     }
+
+    
 }
