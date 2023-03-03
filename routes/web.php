@@ -20,8 +20,6 @@ use App\Http\Controllers\ColorSchemeController;
 |
 */
 
-Route::get('dark-mode-switcher', [DarkModeController::class, 'switch'])->name('dark-mode-switcher');
-Route::get('color-scheme-switcher/{color_scheme}', [ColorSchemeController::class, 'switch'])->name('color-scheme-switcher');
 
 Route::controller(AuthController::class)->middleware('loggedin')->group(function() {
     Route::get('login', 'loginView')->name('login.index');
