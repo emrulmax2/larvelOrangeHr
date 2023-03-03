@@ -4,28 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
-use App\Models\Task;
+use App\Models\Todo;
 
-class Todo extends Model
+class Task extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'description','user_id'
+        'name','todo_id'
     ];
+
     public function getCreatedAtAttribute($value)
     {
         return date("d/m/Y H:i",strtotime($value));
     }
 
-    
-    public function user()
+    public function todo()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function task()
-    {
-        return $this->hasMany(Task::class);
+        return $this->belongsTo(Todo::class);
     }
 }

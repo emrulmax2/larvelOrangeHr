@@ -22,7 +22,7 @@ class TodoFactory extends Factory
                 if ($user = User::find(1)) {
                     return $user->id;
                 }
-                return factory(User::class)->create()->id;
+                return User::factory()->create()->id;
             },
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
