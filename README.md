@@ -14,20 +14,28 @@ This is a Laravel 9 web application framework with javaScript and CSS.
 ## How it works?
 This project register an user who can login from login panel then add a To Do List and can remove the list after completation.
 
+## Demo Site
+Please check the demo site Link <a target="_blank" href="https://demo.eguee.com">demo.eguee.com</a> for a demo view.
+
+## Server Requrement
+This project require php 8.1 or higher. It's built on laravel 9, for more details please check <a href="https://laravel.com/docs/9.x/deployment">server deployment</a> from Laravel installation guide.
+
 ## Installation
 <pre>
 <ul>
-<li>Firts run command line in project directory "composer install" </li>
-<li>Second run command line "pnpm install". after that "pnpm run build"</li>
-<li>now run "php artisan migrate"</li>
-<li>then run "php artisan db:seed"</li>
-<li>finally run "php artisan serve" for dev server</li>
-<li>after that your project will available at browser as localhost:8000</li>
+<li>Firts upgrade your server as per as laravel 9 <a href="https://laravel.com/docs/9.x/deployment">server deployment</a> requirement. </li>
+<li>Now run command line in project directory "composer update" or "composer install". </li>
+<li>Then run command line "pnpm install". after that "pnpm run build"</li>
+<li>Now run "php artisan migrate"</li>
+<li>Next run "php artisan db:seed"</li>
+<li>Finally run "php artisan serve" for dev server</li>
+<li>After that your project will available at browser as localhost:8000.</li>
  </ul>
-    
+Now you can see the project login page with built in admin login and password access.    
 </pre>
 
 Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
 
 ## Code of Conduct
 
