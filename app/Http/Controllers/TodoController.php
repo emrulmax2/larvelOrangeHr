@@ -38,7 +38,7 @@ class TodoController extends Controller
         $limit = $perpage;
         $offset = ($page > 0 ? ($page - 1) * $perpage : 0);
 
-        $query = Todo::with('task')->orderByRaw(implode(',', $sorts));
+        $query = Todo::with('task')->where('user_id',AUTH::id())->orderByRaw(implode(',', $sorts));
         
         // if($status == 2):
         //     $query->onlyTrashed();
