@@ -3,10 +3,13 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Todo;
 use App\Models\Task;
+
+use Illuminate\Support\Facades\Auth;
 
 class ExampleTest extends TestCase
 {
@@ -21,6 +24,7 @@ class ExampleTest extends TestCase
         $response = $this->get('/login');
         $response->assertStatus(200);
     }
+    
     public function test_user_availablity() {
 
             // To test the 'users' table in the database has the following email 
@@ -31,7 +35,6 @@ class ExampleTest extends TestCase
     }
     public function test_user_create() {
 
-        // To test the database has users
         $user = User::factory()->create();
         $hasUser = $user ? true : false;
         
@@ -46,6 +49,13 @@ class ExampleTest extends TestCase
             $this->assertTrue($hasTodo);
 
     }
+    public function test_todo_data_delete() {
+        $task = Todo::factory()->create();
+ 
+        $task->delete();
+        
+        $this->assertModelMissing($task);
+    }
 
     public function test_task_data_create() {
 
@@ -55,6 +65,15 @@ class ExampleTest extends TestCase
         
             $this->assertTrue($hasTodo);
     }
+
+    public function test_task_data_delete() {
+        $task = Task::factory()->create();
+ 
+        $task->delete();
+        
+        $this->assertModelMissing($task);
+    }
+
 
 
 }
