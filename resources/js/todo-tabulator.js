@@ -75,9 +75,12 @@ import Tabulator from "tabulator-tables";
                     print: false,
                     download: false,
                     formatter(cell, formatterParams) {
+                        let taskList = cell.getData().tasks
+                        let classCheck = ""
+                        if(taskList.length>0) { classCheck="text-info"} else {classCheck="" }
                         let a =
                             $(`<div class="flex lg:justify-center items-center">
-                            <a class="view flex items-center mr-3" href="javascript:;">
+                            <a class="view flex items-center mr-3 `+classCheck+`" href="javascript:;">
                                 <i data-lucide="eye" class="w-4 h-4 mr-1"></i> View Tasks
                             </a>
                             <a class="add-task flex items-center mr-3 text-success" href="javascript:;">

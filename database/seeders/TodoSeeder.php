@@ -19,7 +19,7 @@ class TodoSeeder extends Seeder
     {
            
                 // Fake todos
-                Todo::factory()->times(10)->create();
+                Todo::factory()->times(16)->create();
 
     }
 }
