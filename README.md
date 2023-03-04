@@ -15,7 +15,7 @@ This is a Laravel 9 web application framework with javaScript and CSS.
 This project register an user who can login from login panel then add a To Do List and can remove the list after completation.
 
 ## Demo Site
-Please check the demo site Link <a target="_blank" href="https://demo.eguee.com">demo.eguee.com</a> for a demo view.
+Please check the demo site Link <a target="__blank" href="http://demo.eguee.com">demo.eguee.com</a> for a demo view.
 
 ## Server Requrement
 This project require php 8.1 or higher. It's built on laravel 9, for more details please check <a href="https://laravel.com/docs/9.x/deployment">server deployment</a> from Laravel installation guide.
